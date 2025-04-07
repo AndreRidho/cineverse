@@ -1,0 +1,384 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:8953533174493728961",
+      "lastPropertyId": "18:6915043797602786895",
+      "name": "MovieEntity",
+      "properties": [
+        {
+          "id": "1:880331474399359634",
+          "name": "objectboxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7854943913223293983",
+          "name": "id",
+          "type": 6
+        },
+        {
+          "id": "3:2452850063893858257",
+          "name": "adult",
+          "type": 1
+        },
+        {
+          "id": "4:1256204477759867529",
+          "name": "backdropPath",
+          "type": 9
+        },
+        {
+          "id": "5:2848178064657613025",
+          "name": "genreIds",
+          "type": 9
+        },
+        {
+          "id": "6:5290450191821165691",
+          "name": "originalLanguage",
+          "type": 9
+        },
+        {
+          "id": "7:1738891511125751027",
+          "name": "originalTitle",
+          "type": 9
+        },
+        {
+          "id": "8:7080850083363424489",
+          "name": "overview",
+          "type": 9
+        },
+        {
+          "id": "9:427694166165255915",
+          "name": "popularity",
+          "type": 8
+        },
+        {
+          "id": "10:4408077459382721059",
+          "name": "posterPath",
+          "type": 9
+        },
+        {
+          "id": "11:7761037021985787505",
+          "name": "releaseDate",
+          "type": 9
+        },
+        {
+          "id": "12:6914754885691471798",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "13:5090560504179244539",
+          "name": "video",
+          "type": 1
+        },
+        {
+          "id": "14:5284658378506584915",
+          "name": "voteAverage",
+          "type": 8
+        },
+        {
+          "id": "15:1997551906881324294",
+          "name": "voteCount",
+          "type": 6
+        },
+        {
+          "id": "17:6966797751694568981",
+          "name": "cacheId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:2013130152827814036",
+          "relationTarget": "MovieCacheEntity"
+        },
+        {
+          "id": "18:6915043797602786895",
+          "name": "runtime",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:4908492806953922821",
+      "lastPropertyId": "14:5344230746880501573",
+      "name": "ActorEntity",
+      "properties": [
+        {
+          "id": "1:8135821213392364202",
+          "name": "objectboxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2067035666169098409",
+          "name": "id",
+          "type": 6
+        },
+        {
+          "id": "3:707597921703668723",
+          "name": "adult",
+          "type": 1
+        },
+        {
+          "id": "4:2021269469111213622",
+          "name": "gender",
+          "type": 6
+        },
+        {
+          "id": "5:2507502407037026828",
+          "name": "knownForDepartment",
+          "type": 9
+        },
+        {
+          "id": "6:6983605999269342808",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "7:4034594362339887303",
+          "name": "originalName",
+          "type": 9
+        },
+        {
+          "id": "8:4143075083914975162",
+          "name": "popularity",
+          "type": 8
+        },
+        {
+          "id": "9:6814314346399686464",
+          "name": "profilePath",
+          "type": 9
+        },
+        {
+          "id": "10:6813522423209047729",
+          "name": "castId",
+          "type": 6
+        },
+        {
+          "id": "11:8883588647214047931",
+          "name": "character",
+          "type": 9
+        },
+        {
+          "id": "12:8090852323138658991",
+          "name": "creditId",
+          "type": 9
+        },
+        {
+          "id": "14:5344230746880501573",
+          "name": "cacheId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:4400601439954311521",
+          "relationTarget": "ActorCacheEntity"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:3545977305773488395",
+      "lastPropertyId": "4:5712122936058004511",
+      "name": "GenreEntity",
+      "properties": [
+        {
+          "id": "1:5509920407226139591",
+          "name": "objectboxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2448405622685729908",
+          "name": "id",
+          "type": 6
+        },
+        {
+          "id": "3:9127209960596847388",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:5712122936058004511",
+          "name": "cacheId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "5:7455725712308446242",
+          "relationTarget": "GenreCacheEntity"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:2543536369853732611",
+      "lastPropertyId": "5:1963309655572125704",
+      "name": "LanguageEntity",
+      "properties": [
+        {
+          "id": "1:5689115210563104468",
+          "name": "objectboxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7194846401042267644",
+          "name": "iso6391",
+          "type": 9
+        },
+        {
+          "id": "3:6945246780241911498",
+          "name": "englishName",
+          "type": 9
+        },
+        {
+          "id": "4:2937610117101113447",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "5:1963309655572125704",
+          "name": "cacheId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "6:957448105648945019",
+          "relationTarget": "LanguageCacheEntity"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:327909000400417064",
+      "lastPropertyId": "3:4289818800655605562",
+      "name": "ActorCacheEntity",
+      "properties": [
+        {
+          "id": "1:5779093351001441967",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:2213139581722270895",
+          "name": "apiKey",
+          "type": 9
+        },
+        {
+          "id": "3:4289818800655605562",
+          "name": "lastFetched",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:7339926699807891725",
+      "lastPropertyId": "3:8504745220107113055",
+      "name": "GenreCacheEntity",
+      "properties": [
+        {
+          "id": "1:6252221935078337027",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:940188267778779911",
+          "name": "apiKey",
+          "type": 9
+        },
+        {
+          "id": "3:8504745220107113055",
+          "name": "lastFetched",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:9216385272916889853",
+      "lastPropertyId": "3:9034529098467271423",
+      "name": "LanguageCacheEntity",
+      "properties": [
+        {
+          "id": "1:6412891626314299402",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:8028179702296218566",
+          "name": "apiKey",
+          "type": 9
+        },
+        {
+          "id": "3:9034529098467271423",
+          "name": "lastFetched",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "11:3360820204674871980",
+      "lastPropertyId": "3:2879390097746878419",
+      "name": "MovieCacheEntity",
+      "properties": [
+        {
+          "id": "1:3461061765942314240",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:514550262878581578",
+          "name": "apiKey",
+          "type": 9
+        },
+        {
+          "id": "3:2879390097746878419",
+          "name": "lastFetched",
+          "type": 6
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "11:3360820204674871980",
+  "lastIndexId": "6:957448105648945019",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    7089557015242737900,
+    8231444535913341635,
+    6340526597742088597
+  ],
+  "retiredIndexUids": [
+    2600482840616550845,
+    6039590265956987590
+  ],
+  "retiredPropertyUids": [
+    3822542895364571553,
+    2129842002577330185,
+    4485073558053665585,
+    2175002027839489587,
+    9189900540449262815,
+    5404698952240130880,
+    2610024385904778203,
+    3699600419069978277,
+    2029443698658832173,
+    2911414149187052428,
+    6145026498268949431,
+    8154316132732109361,
+    5701523798568622645,
+    8210394914088979980,
+    1195376576045902505,
+    5945013973417224861,
+    6474462824780016503,
+    5084274012290279448,
+    6324982271814651647
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
