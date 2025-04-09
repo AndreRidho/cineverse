@@ -11,36 +11,6 @@ abstract class MovieRemoteDataSource {
     String baseUrl,
   }) = _MovieRemoteDataSource;
 
-  // Authentication
-  @GET('/authentication/token/new')
-  Future createRequestToken({
-    @Query('api_key') required String apiKey,
-  });
-
-  @POST('/authentication/token/validate_with_login')
-  Future validateWithLogin({
-    @Query('api_key') required String apiKey,
-    @Body() required Map<String, dynamic> credentials,
-  });
-
-  @POST('/authentication/session/new')
-  Future createSession({
-    @Query('api_key') required String apiKey,
-    @Body() required Map<String, dynamic> requestToken,
-  });
-
-  @DELETE('/authentication/session')
-  Future deleteSession({
-    @Query('api_key') required String apiKey,
-    @Body() required Map<String, dynamic> sessionId,
-  });
-
-  // Account
-  @GET('/account')
-  Future getAccountDetails({
-    @Query('session_id') required String sessionId,
-  });
-
   @GET('/account/{account_id}/watchlist/movies')
   Future getWatchlistMovies({
     @Path('account_id') required String accountId,

@@ -1,5 +1,6 @@
 import 'package:cineverse/core/routes/app_route.dart';
 import 'package:cineverse/core/routes/navigation_service.dart';
+import 'package:cineverse/l10n/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatelessWidget {
@@ -28,13 +29,19 @@ class BottomBar extends StatelessWidget {
             default:
           }
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded), label: 'Home'),
+            icon: const Icon(Icons.home_rounded),
+            label: AppLocalizations.of(context)!.home,
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_rounded), label: 'My List'),
+            icon: const Icon(Icons.bookmark_rounded),
+            label: AppLocalizations.of(context)!.myList,
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person_rounded), label: 'Profile'),
+            icon: const Icon(Icons.person_rounded),
+            label: AppLocalizations.of(context)!.account,
+          ),
         ]);
   }
 }

@@ -35,7 +35,7 @@ import Flutter
       let values = try fileURL.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
       if let capacity = values.volumeAvailableCapacityForImportantUsage {
         let gb = capacity / (1024 * 1024 * 1024)
-        return "\(gb) GB available"
+        return "\(gb) GB"
       }
     } catch {}
     return "Unavailable"

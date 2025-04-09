@@ -1,4 +1,3 @@
-import 'package:cineverse/feature_movie/data/local/entity/actor_entity.dart';
 import 'package:equatable/equatable.dart';
 
 class Actor implements Equatable {

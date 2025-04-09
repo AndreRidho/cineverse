@@ -20,5 +20,18 @@
   "language": "اللغة",
   "settings": "الإعدادات",
   "changeRestartConfirmMsg": "هل ترغب في إعادة تشغيل التطبيق لتطبيق هذا التغيير؟",
-  "cancel": "إلغاء"
+  "cancel": "إلغاء",
+  "selectLanguage": "اختر لغة",
+  "addGenre": "أضف نوعًا",
+  "enterYear": "أدخل السنة...",
+  "originalTitle": "العنوان الأصلي",
+  "genre": "النوع",
+  "year": "السنة",
+  "sortBy": "ترتيب حسب",
+  "includeAdult": "تضمين الأفلام المخصصة للبالغين",
+  "popularity": "الشعبية",
+  "releaseDate": "تاريخ الإصدار",
+  "revenue": "الإيرادات",
+  "voteAverage": "متوسط التقييم",
+  "voteCount": "عدد الأصوات"
 }

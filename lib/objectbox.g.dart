@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'feature_auth/data/local/entity/account_entity.dart';
 import 'feature_movie/data/local/cache/actor_cache_entity.dart';
 import 'feature_movie/data/local/cache/genre_cache_entity.dart';
 import 'feature_movie/data/local/cache/language_cache_entity.dart';
@@ -372,7 +373,61 @@ final _entities = <obx_int.ModelEntity>[
       backlinks: <obx_int.ModelBacklink>[
         obx_int.ModelBacklink(
             name: 'movies', srcEntity: 'MovieEntity', srcField: 'cache')
-      ])
+      ]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(12, 3401311079481376416),
+      name: 'AccountEntity',
+      lastPropertyId: const obx_int.IdUid(9, 477091633782002870),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 5208509159639047922),
+            name: 'objectboxId',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 2789415063591846482),
+            name: 'id',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 2377098330814003396),
+            name: 'iso6391',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 3535802824291362416),
+            name: 'iso31661',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 7720805553530987688),
+            name: 'name',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 6591583535369507063),
+            name: 'includeAdult',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 3391366258106567606),
+            name: 'username',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 2694640802243248256),
+            name: 'gravatar',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(9, 477091633782002870),
+            name: 'avatarPath',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[])
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -410,7 +465,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(11, 3360820204674871980),
+      lastEntityId: const obx_int.IdUid(12, 3401311079481376416),
       lastIndexId: const obx_int.IdUid(6, 957448105648945019),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -860,6 +915,69 @@ obx_int.ModelDefinition getObjectBoxModel() {
               obx_int.RelInfo<MovieEntity>.toOneBacklink(
                   17, object.id, (MovieEntity srcObject) => srcObject.cache));
           return object;
+        }),
+    AccountEntity: obx_int.EntityDefinition<AccountEntity>(
+        model: _entities[8],
+        toOneRelations: (AccountEntity object) => [],
+        toManyRelations: (AccountEntity object) => {},
+        getId: (AccountEntity object) => object.objectboxId,
+        setId: (AccountEntity object, int id) {
+          object.objectboxId = id;
+        },
+        objectToFB: (AccountEntity object, fb.Builder fbb) {
+          final iso6391Offset = fbb.writeString(object.iso6391);
+          final iso31661Offset = fbb.writeString(object.iso31661);
+          final nameOffset = fbb.writeString(object.name);
+          final usernameOffset = fbb.writeString(object.username);
+          final gravatarOffset = fbb.writeString(object.gravatar);
+          final avatarPathOffset = object.avatarPath == null
+              ? null
+              : fbb.writeString(object.avatarPath!);
+          fbb.startTable(10);
+          fbb.addInt64(0, object.objectboxId);
+          fbb.addInt64(1, object.id);
+          fbb.addOffset(2, iso6391Offset);
+          fbb.addOffset(3, iso31661Offset);
+          fbb.addOffset(4, nameOffset);
+          fbb.addBool(5, object.includeAdult);
+          fbb.addOffset(6, usernameOffset);
+          fbb.addOffset(7, gravatarOffset);
+          fbb.addOffset(8, avatarPathOffset);
+          fbb.finish(fbb.endTable());
+          return object.objectboxId;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
+          final iso6391Param = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final iso31661Param = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 10, '');
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 12, '');
+          final includeAdultParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 14, false);
+          final usernameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 16, '');
+          final gravatarParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 18, '');
+          final avatarPathParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 20);
+          final object = AccountEntity(
+              id: idParam,
+              iso6391: iso6391Param,
+              iso31661: iso31661Param,
+              name: nameParam,
+              includeAdult: includeAdultParam,
+              username: usernameParam,
+              gravatar: gravatarParam,
+              avatarPath: avatarPathParam)
+            ..objectboxId =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
         })
   };
 
@@ -1110,4 +1228,43 @@ class MovieCacheEntity_ {
   /// see [MovieCacheEntity.movies]
   static final movies = obx.QueryBacklinkToMany<MovieEntity, MovieCacheEntity>(
       MovieEntity_.cache);
+}
+
+/// [AccountEntity] entity fields to define ObjectBox queries.
+class AccountEntity_ {
+  /// See [AccountEntity.objectboxId].
+  static final objectboxId =
+      obx.QueryIntegerProperty<AccountEntity>(_entities[8].properties[0]);
+
+  /// See [AccountEntity.id].
+  static final id =
+      obx.QueryIntegerProperty<AccountEntity>(_entities[8].properties[1]);
+
+  /// See [AccountEntity.iso6391].
+  static final iso6391 =
+      obx.QueryStringProperty<AccountEntity>(_entities[8].properties[2]);
+
+  /// See [AccountEntity.iso31661].
+  static final iso31661 =
+      obx.QueryStringProperty<AccountEntity>(_entities[8].properties[3]);
+
+  /// See [AccountEntity.name].
+  static final name =
+      obx.QueryStringProperty<AccountEntity>(_entities[8].properties[4]);
+
+  /// See [AccountEntity.includeAdult].
+  static final includeAdult =
+      obx.QueryBooleanProperty<AccountEntity>(_entities[8].properties[5]);
+
+  /// See [AccountEntity.username].
+  static final username =
+      obx.QueryStringProperty<AccountEntity>(_entities[8].properties[6]);
+
+  /// See [AccountEntity.gravatar].
+  static final gravatar =
+      obx.QueryStringProperty<AccountEntity>(_entities[8].properties[7]);
+
+  /// See [AccountEntity.avatarPath].
+  static final avatarPath =
+      obx.QueryStringProperty<AccountEntity>(_entities[8].properties[8]);
 }

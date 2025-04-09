@@ -69,4 +69,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get selectLanguage => 'Select a language';
+
+  @override
+  String get addGenre => 'Add a genre';
+
+  @override
+  String get enterYear => 'Enter year...';
+
+  @override
+  String get originalTitle => 'Original Title';
+
+  @override
+  String get genre => 'Genre';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get sortBy => 'Sort by';
+
+  @override
+  String get includeAdult => 'Include adult-rated movies';
+
+  @override
+  String get popularity => 'Popularity';
+
+  @override
+  String get releaseDate => 'Release Date';
+
+  @override
+  String get revenue => 'Revenue';
+
+  @override
+  String get voteAverage => 'Vote Average';
+
+  @override
+  String get voteCount => 'Vote Count';
 }

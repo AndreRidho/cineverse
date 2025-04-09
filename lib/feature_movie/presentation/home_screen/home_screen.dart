@@ -4,6 +4,7 @@ import 'package:cineverse/core/routes/navigation_service.dart';
 import 'package:cineverse/config/colors/colors.dart';
 import 'package:cineverse/core/constants/constants.dart';
 import 'package:cineverse/core/di/di.dart';
+import 'package:cineverse/l10n/gen_l10n/app_localizations.dart';
 import 'package:cineverse/util/mixin/dialogs.dart';
 import 'package:cineverse/util/mixin/underline_border.dart';
 import 'package:cineverse/widget/bottom_bar.dart';
@@ -120,7 +121,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CineVerse'),
+        title: Text(AppLocalizations.of(context)!.cineVerse),
         automaticallyImplyLeading: false,
       ),
       body: BlocConsumer<HomeScreenCubit, HomeScreenState>(
@@ -141,7 +142,14 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
           }
 
           if (state is HomeScreenError) {
-            errorDialog(context, state.message);
+            alertDialog(
+              context,
+              message: state.message,
+              showLeft: false,
+              leftText: 'Back',
+              rightText: 'OK',
+              rightAction: pop,
+            );
           }
         },
         builder: (context, state) {
@@ -292,7 +300,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                     movieRow(
                       context,
                       size,
-                      'Popular',
+                      AppLocalizations.of(context)!.popular,
                       popular.value,
                       popularPage,
                       (page) {
@@ -308,7 +316,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                     movieRow(
                       context,
                       size,
-                      'Upcoming',
+                      AppLocalizations.of(context)!.upcoming,
                       upcoming.value,
                       upcomingPage,
                       (page) {
@@ -324,7 +332,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                     movieRow(
                       context,
                       size,
-                      'Now Playing',
+                      AppLocalizations.of(context)!.nowPlaying,
                       nowPlaying.value,
                       nowPlayingPage,
                       (page) {
@@ -340,7 +348,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                     movieRow(
                       context,
                       size,
-                      'Top Rated',
+                      AppLocalizations.of(context)!.topRated,
                       topRated.value,
                       topRatedPage,
                       (page) {
@@ -450,10 +458,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
           state.maybeWhen(
             error: (message) {
               pop();
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message)),
-              );
+              snackMessage(context, message);
             },
             orElse: () {},
           );
@@ -490,6 +495,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                               genres.value.any((e) => stateGenre.id == e.id));
 
                           return searchDialogContents(
+                              context: context,
                               language: language,
                               languages: languages,
                               tempStateGenres: tempStateGenres,
@@ -526,6 +532,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
   }
 
   List<Widget> searchDialogContents({
+    required context,
     required ValueNotifier<Language?> language,
     required List<Language> languages,
     required List<Genre?> tempStateGenres,
@@ -550,10 +557,10 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Language"),
+              Text(AppLocalizations.of(context)!.language),
               MyDropdown(
                 value: language.value,
-                hint: "Select a language",
+                hint: AppLocalizations.of(context)!.selectLanguage,
                 items: languages,
                 getLabel: (lang) => lang.englishName,
                 onChanged: (newValue) => language.value = newValue,
@@ -564,12 +571,13 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Genre"),
+                Text(AppLocalizations.of(context)!.genre),
                 MyDropdown(
                   value: null,
-                  hint: "Add a genre",
+                  hint: AppLocalizations.of(context)!.addGenre,
                   items: tempStateGenres,
-                  getLabel: (genre) => genre?.name ?? "Add a genre",
+                  getLabel: (genre) =>
+                      genre?.name ?? AppLocalizations.of(context)!.addGenre,
                   onChanged: (newValue) {
                     if (newValue != null) {
                       final tempList = [...genres.value];
@@ -596,7 +604,8 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Expanded(flex: 3, child: Text("Year")),
+              Expanded(
+                  flex: 3, child: Text(AppLocalizations.of(context)!.year)),
               Expanded(
                 flex: 2,
                 child: TextFormField(
@@ -605,7 +614,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                     border: underlineBorder(faded: true),
                     enabledBorder: underlineBorder(faded: true),
                     focusedBorder: underlineBorder(),
-                    hintText: "Enter year...",
+                    hintText: AppLocalizations.of(context)!.enterYear,
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -624,12 +633,12 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
           ),
           Row(
             children: [
-              const Expanded(child: Text("Sort by")),
+              Expanded(child: Text(AppLocalizations.of(context)!.sortBy)),
               MyDropdown(
                 value: sortBy.value,
                 hint: "Sort...",
                 items: SearchCategory.values,
-                getLabel: (c) => c.displayName,
+                getLabel: (c) => c.getDisplayName(context),
                 onChanged: (value) => sortBy.value = value,
               ),
               if (sortBy.value != null)
@@ -648,7 +657,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Include adult-rated movies"),
+              Text(AppLocalizations.of(context)!.includeAdult),
               Checkbox(
                 value: includeAdult.value,
                 onChanged: (newValue) {
@@ -666,9 +675,9 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
         children: [
           TextButton(
             onPressed: pop,
-            child: const Text(
-              'Back',
-              style: TextStyle(color: blueGray),
+            child: Text(
+              AppLocalizations.of(context)!.back,
+              style: const TextStyle(color: blueGray),
             ),
           ),
           TextButton(
@@ -681,9 +690,9 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
               ia.value = includeAdult.value;
               pop();
             },
-            child: const Text(
-              'Apply',
-              style: TextStyle(color: Colors.white),
+            child: Text(
+              AppLocalizations.of(context)!.apply,
+              style: const TextStyle(color: Colors.white),
             ),
           )
         ],
@@ -702,20 +711,20 @@ enum SearchCategory {
 }
 
 extension SearchCategoryExtension on SearchCategory {
-  String get displayName {
+  String getDisplayName(BuildContext context) {
     switch (this) {
       case SearchCategory.popularity:
-        return "Popularity";
+        return AppLocalizations.of(context)!.popularity;
       case SearchCategory.releaseDate:
-        return "Release Date";
+        return AppLocalizations.of(context)!.releaseDate;
       case SearchCategory.revenue:
-        return "Revenue";
+        return AppLocalizations.of(context)!.revenue;
       case SearchCategory.originalTitle:
-        return "Original Title";
+        return AppLocalizations.of(context)!.originalTitle;
       case SearchCategory.voteAverage:
-        return "Vote Average";
+        return AppLocalizations.of(context)!.voteAverage;
       case SearchCategory.voteCount:
-        return "Vote Count";
+        return AppLocalizations.of(context)!.voteCount;
     }
   }
 

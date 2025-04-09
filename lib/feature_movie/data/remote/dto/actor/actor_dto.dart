@@ -18,7 +18,6 @@ class ActorDto with _$ActorDto {
     @JsonKey(name: 'cast_id') required int castId,
     required String character,
     @JsonKey(name: 'credit_id') required String creditId,
-    // required int order,
   }) = _ActorDto;
 
   factory ActorDto.fromJson(Map<String, dynamic> json) =>
@@ -39,7 +38,6 @@ class ActorDto with _$ActorDto {
       castId: castId,
       character: character,
       creditId: creditId,
-      // order: order,
     );
   }
 }

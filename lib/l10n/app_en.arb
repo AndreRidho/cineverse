@@ -20,5 +20,18 @@
   "language": "Language",
   "settings": "Settings",
   "changeRestartConfirmMsg": "Would you like to restart the app to apply this change?",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "selectLanguage": "Select a language",
+  "addGenre": "Add a genre",
+  "enterYear": "Enter year...",
+  "originalTitle": "Original Title",
+  "genre": "Genre",
+  "year": "Year",
+  "sortBy": "Sort by",
+  "includeAdult": "Include adult-rated movies",
+  "popularity": "Popularity",
+  "releaseDate": "Release Date",
+  "revenue": "Revenue",
+  "voteAverage": "Vote Average",
+  "voteCount": "Vote Count"
 }

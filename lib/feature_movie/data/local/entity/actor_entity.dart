@@ -18,7 +18,6 @@ class ActorEntity {
   int castId;
   String character;
   String creditId;
-  // int order;
 
   ActorEntity({
     required this.id,
@@ -32,7 +31,6 @@ class ActorEntity {
     required this.castId,
     required this.character,
     required this.creditId,
-    // required this.order,
   });
 
   final ToOne<ActorCacheEntity> cache = ToOne<ActorCacheEntity>();
@@ -50,7 +48,6 @@ class ActorEntity {
       castId: castId,
       character: character,
       creditId: creditId,
-      // order: order,
     );
   }
 }

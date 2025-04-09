@@ -16,10 +16,43 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LocaleState {
-  Locale get locale => throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $LocaleStateCopyWith<LocaleState> get copyWith =>
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Locale locale) loaded,
+    required TResult Function() loading,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Locale locale)? loaded,
+    TResult? Function()? loading,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Locale locale)? loaded,
+    TResult Function()? loading,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Loading value) loading,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Loading value)? loading,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Loading value)? loading,
+    required TResult orElse(),
+  }) =>
       throw _privateConstructorUsedError;
 }
 
@@ -28,8 +61,6 @@ abstract class $LocaleStateCopyWith<$Res> {
   factory $LocaleStateCopyWith(
           LocaleState value, $Res Function(LocaleState) then) =
       _$LocaleStateCopyWithImpl<$Res, LocaleState>;
-  @useResult
-  $Res call({Locale locale});
 }
 
 /// @nodoc
@@ -41,38 +72,23 @@ class _$LocaleStateCopyWithImpl<$Res, $Val extends LocaleState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? locale = null,
-  }) {
-    return _then(_value.copyWith(
-      locale: null == locale
-          ? _value.locale
-          : locale // ignore: cast_nullable_to_non_nullable
-              as Locale,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$LocaleStateImplCopyWith<$Res>
-    implements $LocaleStateCopyWith<$Res> {
-  factory _$$LocaleStateImplCopyWith(
-          _$LocaleStateImpl value, $Res Function(_$LocaleStateImpl) then) =
-      __$$LocaleStateImplCopyWithImpl<$Res>;
-  @override
+abstract class _$$LoadedImplCopyWith<$Res> {
+  factory _$$LoadedImplCopyWith(
+          _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
+      __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Locale locale});
 }
 
 /// @nodoc
-class __$$LocaleStateImplCopyWithImpl<$Res>
-    extends _$LocaleStateCopyWithImpl<$Res, _$LocaleStateImpl>
-    implements _$$LocaleStateImplCopyWith<$Res> {
-  __$$LocaleStateImplCopyWithImpl(
-      _$LocaleStateImpl _value, $Res Function(_$LocaleStateImpl) _then)
+class __$$LoadedImplCopyWithImpl<$Res>
+    extends _$LocaleStateCopyWithImpl<$Res, _$LoadedImpl>
+    implements _$$LoadedImplCopyWith<$Res> {
+  __$$LoadedImplCopyWithImpl(
+      _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +96,7 @@ class __$$LocaleStateImplCopyWithImpl<$Res>
   $Res call({
     Object? locale = null,
   }) {
-    return _then(_$LocaleStateImpl(
+    return _then(_$LoadedImpl(
       null == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
@@ -91,22 +107,22 @@ class __$$LocaleStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LocaleStateImpl implements _LocaleState {
-  const _$LocaleStateImpl(this.locale);
+class _$LoadedImpl implements _Loaded {
+  const _$LoadedImpl(this.locale);
 
   @override
   final Locale locale;
 
   @override
   String toString() {
-    return 'LocaleState(locale: $locale)';
+    return 'LocaleState.loaded(locale: $locale)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LocaleStateImpl &&
+            other is _$LoadedImpl &&
             (identical(other.locale, locale) || other.locale == locale));
   }
 
@@ -116,17 +132,179 @@ class _$LocaleStateImpl implements _LocaleState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LocaleStateImplCopyWith<_$LocaleStateImpl> get copyWith =>
-      __$$LocaleStateImplCopyWithImpl<_$LocaleStateImpl>(this, _$identity);
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      __$$LoadedImplCopyWithImpl<_$LoadedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Locale locale) loaded,
+    required TResult Function() loading,
+  }) {
+    return loaded(locale);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Locale locale)? loaded,
+    TResult? Function()? loading,
+  }) {
+    return loaded?.call(locale);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Locale locale)? loaded,
+    TResult Function()? loading,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(locale);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Loading value) loading,
+  }) {
+    return loaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Loading value)? loading,
+  }) {
+    return loaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Loading value)? loading,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(this);
+    }
+    return orElse();
+  }
 }
 
-abstract class _LocaleState implements LocaleState {
-  const factory _LocaleState(final Locale locale) = _$LocaleStateImpl;
+abstract class _Loaded implements LocaleState {
+  const factory _Loaded(final Locale locale) = _$LoadedImpl;
+
+  Locale get locale;
+  @JsonKey(ignore: true)
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoadingImplCopyWith<$Res> {
+  factory _$$LoadingImplCopyWith(
+          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
+      __$$LoadingImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadingImplCopyWithImpl<$Res>
+    extends _$LocaleStateCopyWithImpl<$Res, _$LoadingImpl>
+    implements _$$LoadingImplCopyWith<$Res> {
+  __$$LoadingImplCopyWithImpl(
+      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$LoadingImpl implements _Loading {
+  const _$LoadingImpl();
 
   @override
-  Locale get locale;
+  String toString() {
+    return 'LocaleState.loading()';
+  }
+
   @override
-  @JsonKey(ignore: true)
-  _$$LocaleStateImplCopyWith<_$LocaleStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadingImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Locale locale) loaded,
+    required TResult Function() loading,
+  }) {
+    return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Locale locale)? loaded,
+    TResult? Function()? loading,
+  }) {
+    return loading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Locale locale)? loaded,
+    TResult Function()? loading,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Loading value) loading,
+  }) {
+    return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Loading value)? loading,
+  }) {
+    return loading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Loading value)? loading,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loading implements LocaleState {
+  const factory _Loading() = _$LoadingImpl;
 }

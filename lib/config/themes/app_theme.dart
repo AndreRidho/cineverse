@@ -7,6 +7,26 @@ class AppTheme {
       splashColor: navy,
       useMaterial3: true,
       scaffoldBackgroundColor: navy,
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.disabled)) {
+                return blue.withOpacity(0.5);
+              }
+              return blue;
+            },
+          ),
+          foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.disabled)) {
+                return Colors.white.withOpacity(0.5);
+              }
+              return Colors.white;
+            },
+          ),
+        ),
+      ),
       textSelectionTheme: const TextSelectionThemeData(
           cursorColor: blueGray,
           selectionHandleColor: blueGray,

@@ -1,37 +1,40 @@
+import 'package:cineverse/config/colors/colors.dart';
 import 'package:cineverse/main.dart';
+import 'package:cineverse/widget/loading.dart';
 import 'package:flutter/material.dart';
 
 mixin Dialogs {
-  void errorDialog(
-    BuildContext context,
-    String message, {
-    bool dismissable = true,
-    Function? onPressed,
-    Function? then,
-    String? buttonText,
-  }) {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => AlertDialog(
+  void alertDialog(BuildContext context,
+      {required String message,
+      required String leftText,
+      required String rightText,
+      required Function() rightAction,
+      Function() leftAction = pop,
+      bool showLeft = true}) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
           content: Text(message),
           actions: [
-            if (dismissable)
+            if (showLeft)
               TextButton(
-                onPressed: () => onPressed == null ? pop() : onPressed(),
+                onPressed: leftAction,
                 child: Text(
-                  buttonText ?? 'OK',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+                  leftText,
+                  style: const TextStyle(color: blueGray),
                 ),
-              )
+              ),
+            TextButton(
+              onPressed: rightAction,
+              child: Text(
+                rightText,
+                style: const TextStyle(color: Colors.white),
+              ),
+            )
           ],
-        ),
-      ).then(
-        (value) => then == null ? {} : then(),
-      ),
+        );
+      },
     );
   }
 
@@ -39,15 +42,15 @@ mixin Dialogs {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => const AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Loading...'),
-            SizedBox(height: 10),
-          ],
-        ),
+      builder: (context) => const Padding(
+        padding: EdgeInsets.all(20),
+        child: Loading(),
       ),
     );
+  }
+
+  snackMessage(context, String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }

@@ -49,6 +49,6 @@ class MainActivity: FlutterActivity() {
         val stat = StatFs(Environment.getDataDirectory().path)
         val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
         val gbAvailable = bytesAvailable / (1024 * 1024 * 1024)
-        return "$gbAvailable GB available"
+        return "$gbAvailable GB"
     }
 }

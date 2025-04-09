@@ -1,6 +1,15 @@
 import 'package:cineverse/app/cubit/locale_cubit.dart';
+import 'package:cineverse/app/splash_screen/cubit/splash_screen_cubit.dart';
 import 'package:cineverse/core/di/dio_di_helper.dart';
 import 'package:cineverse/core/local/objectbox_db.dart';
+import 'package:cineverse/feature_auth/data/remote/auth_remote_data_source.dart';
+import 'package:cineverse/feature_auth/data/repository/auth_repository_impl.dart';
+import 'package:cineverse/feature_auth/domain/repository/auth_repository.dart';
+import 'package:cineverse/feature_auth/domain/use_case/get_account_use_case.dart';
+import 'package:cineverse/feature_auth/domain/use_case/log_in_use_case.dart';
+import 'package:cineverse/feature_auth/domain/use_case/log_out_use_case.dart';
+import 'package:cineverse/feature_auth/presentation/login_screen/cubit/login_screen_cubit.dart';
+import 'package:cineverse/feature_auth/presentation/settings_screen/cubit/settings_screen_cubit.dart';
 import 'package:cineverse/feature_movie/data/local/cache/actor_cache_entity.dart';
 import 'package:cineverse/feature_movie/data/local/cache/genre_cache_entity.dart';
 import 'package:cineverse/feature_movie/data/local/cache/language_cache_entity.dart';
@@ -72,6 +81,9 @@ void remoteDataSources(GetIt sl) {
   sl.registerLazySingleton<MovieRemoteDataSource>(
     () => MovieRemoteDataSource(sl()),
   );
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSource(sl()),
+  );
 }
 
 void localDataSources(GetIt sl) {
@@ -99,6 +111,9 @@ void repositories(GetIt sl) {
       languageLocal: sl(),
     ),
   );
+  sl.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(remote: sl(), prefs: sl()),
+  );
 }
 
 void useCases(GetIt sl) {
@@ -109,6 +124,9 @@ void useCases(GetIt sl) {
   sl.registerLazySingleton(() => GetGenresUseCase(sl()));
   sl.registerLazySingleton(() => DiscoverMoviesUseCase(sl()));
   sl.registerLazySingleton(() => GetMovieDetailsUseCase(sl()));
+  sl.registerLazySingleton(() => LoginUseCase(sl()));
+  sl.registerLazySingleton(() => GetAccountUseCase(sl()));
+  sl.registerLazySingleton(() => LogOutUseCase(sl()));
 }
 
 void blocs(GetIt sl) {
@@ -116,4 +134,7 @@ void blocs(GetIt sl) {
   sl.registerFactory(() => HomeScreenCubit(sl(), sl(), sl()));
   sl.registerFactory(() => SetupSearchCubit(sl(), sl()));
   sl.registerFactory(() => MovieScreenCubit(sl(), sl(), sl()));
+  sl.registerFactory(() => SplashScreenCubit(sl()));
+  sl.registerFactory(() => LoginScreenCubit(sl(), sl()));
+  sl.registerFactory(() => SettingsScreenCubit(sl()));
 }

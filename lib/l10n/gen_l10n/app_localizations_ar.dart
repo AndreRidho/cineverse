@@ -69,4 +69,43 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get cancel => 'إلغاء';
+
+  @override
+  String get selectLanguage => 'اختر لغة';
+
+  @override
+  String get addGenre => 'أضف نوعًا';
+
+  @override
+  String get enterYear => 'أدخل السنة...';
+
+  @override
+  String get originalTitle => 'العنوان الأصلي';
+
+  @override
+  String get genre => 'النوع';
+
+  @override
+  String get year => 'السنة';
+
+  @override
+  String get sortBy => 'ترتيب حسب';
+
+  @override
+  String get includeAdult => 'تضمين الأفلام المخصصة للبالغين';
+
+  @override
+  String get popularity => 'الشعبية';
+
+  @override
+  String get releaseDate => 'تاريخ الإصدار';
+
+  @override
+  String get revenue => 'الإيرادات';
+
+  @override
+  String get voteAverage => 'متوسط التقييم';
+
+  @override
+  String get voteCount => 'عدد الأصوات';
 }

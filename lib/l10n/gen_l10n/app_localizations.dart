@@ -224,6 +224,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a language'**
+  String get selectLanguage;
+
+  /// No description provided for @addGenre.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a genre'**
+  String get addGenre;
+
+  /// No description provided for @enterYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter year...'**
+  String get enterYear;
+
+  /// No description provided for @originalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Original Title'**
+  String get originalTitle;
+
+  /// No description provided for @genre.
+  ///
+  /// In en, this message translates to:
+  /// **'Genre'**
+  String get genre;
+
+  /// No description provided for @year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get year;
+
+  /// No description provided for @sortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get sortBy;
+
+  /// No description provided for @includeAdult.
+  ///
+  /// In en, this message translates to:
+  /// **'Include adult-rated movies'**
+  String get includeAdult;
+
+  /// No description provided for @popularity.
+  ///
+  /// In en, this message translates to:
+  /// **'Popularity'**
+  String get popularity;
+
+  /// No description provided for @releaseDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Release Date'**
+  String get releaseDate;
+
+  /// No description provided for @revenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Revenue'**
+  String get revenue;
+
+  /// No description provided for @voteAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote Average'**
+  String get voteAverage;
+
+  /// No description provided for @voteCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote Count'**
+  String get voteCount;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

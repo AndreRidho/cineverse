@@ -18,34 +18,34 @@ mixin DataSourceFactory {
     final apiKey = '$apiName?$paramsString';
 
     try {
-      print('debug dsf a apikey: $apiKey');
+      // print('debug dsf a apikey: $apiKey');
       if (checkCacheValidity(apiKey)) {
-        print('debug dsf b');
+        // print('debug dsf b');
         return local(apiKey);
       }
-      print('debug dsf c');
+      // print('debug dsf c');
 
       List<Dto> dtos = await remote(apiKey);
 
-      print('debug dsf d $dtos');
+      // print('debug dsf d $dtos');
       final entities = dtos.map((e) => toEntity(e)).toList();
 
-      print('debug dsf d $entities');
-      print('debug dsf e');
+      // print('debug dsf d $entities');
+      // print('debug dsf e');
       clear(apiKey);
 
-      print('debug dsf f');
+      // print('debug dsf f');
       save(apiName, apiKey, entities);
 
-      print('debug dsf g');
+      // print('debug dsf g');
       return local(apiKey);
     } on DioException {
-      print('debug dsf h');
+      // print('debug dsf h');
       return local(apiKey);
     } on CacheException {
       return const Right([]);
     } catch (e) {
-      print('debug dsf $e');
+      // print('debug dsf $e');
       return const Left(ExceptionFailure("An error occurred."));
     }
   }
