@@ -117,8 +117,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         }
       },
       (r) {
-        print("debug results $r");
-
         emit(searchOrDiscover
             ? HomeScreenInitial(searchResults: r, pageChanged: pageChanged)
             : HomeScreenInitial(discoverResults: r, pageChanged: pageChanged));

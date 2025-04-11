@@ -16,15 +16,12 @@ class LocaleCubit extends Cubit<LocaleState> {
   Future<void> get() async {
     emit(const LocaleState.loading());
     final locale = prefs.getString(kLocale);
-    print('debug cubit get $locale');
     emit(LocaleState.loaded(Locale(locale ?? 'en')));
   }
 
   Future<void> set(String localeString) async {
     emit(const LocaleState.loading());
-    print('debug cubit a $localeString');
     await prefs.setString(kLocale, localeString);
-    print('debug cubit b ${prefs.getString(kLocale)}');
     Restart.restartApp();
   }
 }

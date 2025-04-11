@@ -420,7 +420,6 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                       ...state.maybeWhen<List<Widget>>(
                         loaded: (stateGenres, languages) {
                           final tempStateGenres = [...stateGenres];
-                          print('debug stateGenres: $stateGenres');
 
                           tempStateGenres.removeWhere((stateGenre) =>
                               genres.value.any((e) => stateGenre.id == e.id));
@@ -481,12 +480,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
     required ValueNotifier<SearchCategory?> sb,
     required ValueNotifier<bool> ia,
   }) {
-    print('debug genres: ${genres.value}');
-    print('debug tempStateGenres: $tempStateGenres');
-
     final tempLanguages = [...languages];
-    print('debug language: ${language.value}');
-    print('debug tempLanguages: ${tempLanguages.length}');
 
     tempLanguages.sort((a, b) => a.englishName.compareTo(b.englishName));
 

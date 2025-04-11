@@ -4,7 +4,6 @@ import 'package:cineverse/core/routes/app_route.dart';
 import 'package:cineverse/core/routes/navigation_service.dart';
 import 'package:cineverse/feature_movie/presentation/my_list_screen/cubit/my_list_screen_cubit.dart';
 import 'package:cineverse/l10n/gen_l10n/app_localizations.dart';
-import 'package:cineverse/main.dart';
 import 'package:cineverse/util/mixin/dialogs.dart';
 import 'package:cineverse/widget/bottom_bar.dart';
 import 'package:cineverse/widget/loading.dart';

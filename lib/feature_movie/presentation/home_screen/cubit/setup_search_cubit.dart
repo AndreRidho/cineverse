@@ -20,10 +20,8 @@ class SetupSearchCubit extends Cubit<SetupSearchState> {
   Future<void> getGenresAndLanguages() async {
     emit(const SetupSearchState.loading());
 
-    final genresResult = await _getGenres(GetGenresParams());
+    final genresResult = await _getGenres(const GetGenresParams());
     final languagesResult = await _getLanguages(NoParams());
-
-    print('debug genre cubit');
 
     // Check for errors
     if (genresResult.isLeft() || languagesResult.isLeft()) {
@@ -37,9 +35,6 @@ class SetupSearchCubit extends Cubit<SetupSearchState> {
         return null;
       }
 
-      print('debug genre $genreFailure');
-      print('debug genre $languagesResult');
-
       final failureMessage = getFailureMessage(genreFailure) ??
           getFailureMessage(languageFailure) ??
           "An error occurred.";
@@ -47,8 +42,6 @@ class SetupSearchCubit extends Cubit<SetupSearchState> {
       emit(SetupSearchState.error(failureMessage));
       return;
     }
-
-    print('debug genre success $genresResult');
 
     // Extract the successful results
     final genres = genresResult.getOrElse(() => []);

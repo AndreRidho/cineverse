@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cineverse/config/colors/colors.dart';
-import 'package:cineverse/core/constants/constants.dart';
 import 'package:cineverse/widget/fade_text.dart';
 import 'package:cineverse/widget/shimmer_card.dart';
 import 'package:cineverse/widget/shimmer_image.dart';

@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:cineverse/core/error/failure.dart';
 import 'package:cineverse/feature_movie/domain/model/actor.dart';
 import 'package:cineverse/feature_movie/domain/model/genre.dart';
 import 'package:cineverse/feature_movie/domain/model/movie.dart';
@@ -25,10 +24,9 @@ class MovieScreenCubit extends Cubit<MovieScreenState> {
     final getActorsResult = await _getActors(GetActorsParams(movieId: movieId));
     final getMoviesDetailsResult =
         await _getMovieDetails(GetMovieDetailsParams(movieId: movieId));
-    final getGenresResult = await _getGenres(GetGenresParams());
+    final getGenresResult = await _getGenres(const GetGenresParams());
 
     final actors = getActorsResult.fold((l) => null, (r) => r);
-    print('debug cubit actors $actors');
     final details = getMoviesDetailsResult.fold((l) => null, (r) => r);
     final genres = getGenresResult.fold((l) => null, (r) => r);
 

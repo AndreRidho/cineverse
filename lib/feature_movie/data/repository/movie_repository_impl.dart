@@ -70,9 +70,7 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
         return Right(cache.movies.map((e) => e.toModel()).toList());
       },
       clear: (apiKey) {
-        print('debug clear a');
         _movieLocal.clearCache(apiKey);
-        print('debug clear b');
       },
       remote: (apiKey) async {
         dynamic result;
@@ -146,12 +144,9 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
       paramsString: params.toString(),
       checkCacheValidity: _movieLocal.isCacheValid,
       local: (apiKey) {
-        print("debug local a");
         final cache = _movieLocal.getCache(apiKey);
-        print("debug local b");
 
         if (cache == null) throw CacheException();
-        print("debug local c ${cache.movies}");
 
         return Right(cache.movies.map((e) => e.toModel()).toList());
       },
@@ -166,8 +161,6 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
           includeAdult: params.includeAdult,
           year: params.year,
         );
-
-        print('debug repo ${result['results']}');
 
         return (result['results'] as List)
             .map((e) => MovieDto.fromJson(e))
@@ -191,26 +184,18 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
 
         final genres = cache.genres.map((e) => e.toModel()).toList();
 
-        print("debug local $genres");
-
         return Right(genres);
       },
       clear: _genreLocal.clearCache,
       remote: (apiKey) async {
         final language = _prefs.getString(kLocale);
-        print("debug remote a $language");
 
         final result = await _remote.getMovieGenres(language: language ?? 'en');
 
-        print("debug remote b");
         final genres = (result['genres'] as List).map((e) {
-          print("debug remote c");
           final genre = GenreDto.fromJson(e);
-          print("debug remote d");
           return genre;
         }).toList();
-
-        print("debug remote e $genres");
 
         return genres;
       },

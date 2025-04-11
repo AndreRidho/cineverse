@@ -48,22 +48,17 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> login(LoginParams params) async {
     try {
-      print('debug repo a');
       final String requestToken =
           (await _remote.createRequestToken(apiKey: kApiKey))['request_token'];
-      print('debug repo b');
       await _remote.validateWithLogin(apiKey: kApiKey, credentials: {
         "username": params.username,
         "password": params.password,
         "request_token": requestToken
       });
-      print('debug repo c');
       final sessionResult = await _remote.createSession(
           apiKey: kApiKey, requestToken: {"request_token": requestToken});
-      print('debug repo result $sessionResult');
 
       final sessionId = sessionResult['session_id'];
-      print('debug repo d');
       await _getAndSetAccountId(sessionId);
 
       await _prefs.setString(kSessionId, sessionId);
