@@ -189,6 +189,12 @@ abstract class AppLocalizations {
   /// **'Add to Watchlist'**
   String get addToWatchList;
 
+  /// No description provided for @removeFromWatchList.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from Watchlist'**
+  String get removeFromWatchList;
+
   /// No description provided for @back.
   ///
   /// In en, this message translates to:
@@ -302,6 +308,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vote Count'**
   String get voteCount;
+
+  /// No description provided for @logoutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get logoutConfirmation;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logout;
+
+  /// No description provided for @signIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signIn;
+
+  /// No description provided for @username.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get username;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @logIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get logIn;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

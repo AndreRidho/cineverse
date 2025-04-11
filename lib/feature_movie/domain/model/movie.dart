@@ -1,4 +1,3 @@
-import 'package:cineverse/feature_movie/data/local/entity/movie_entity.dart';
 import 'package:equatable/equatable.dart';
 
 class Movie implements Equatable {
@@ -38,26 +37,27 @@ class Movie implements Equatable {
 
   @override
   List<Object?> get props => [
-        [
-          id,
-          adult,
-          backdropPath,
-          genreIds,
-          originalLanguage,
-          originalTitle,
-          overview,
-          popularity,
-          posterPath,
-          runtime,
-          releaseDate,
-          title,
-          video,
-          voteAverage,
-          voteCount
-        ]
+        id,
+        adult,
+        backdropPath,
+        genreIds,
+        originalLanguage,
+        originalTitle,
+        overview,
+        popularity,
+        posterPath,
+        runtime,
+        releaseDate,
+        title,
+        video,
+        voteAverage,
+        voteCount
       ];
 
   @override
-  // TODO: implement stringify
-  bool? get stringify => throw UnimplementedError();
+  bool? get stringify => true;
+
+  @override
+  String toString() =>
+      'Movie(id: $id, title: $title, releaseDate: $releaseDate)';
 }

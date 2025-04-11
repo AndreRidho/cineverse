@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cineverse/core/constants/languages.dart';
 import 'package:cineverse/core/routes/app_route.dart';
 import 'package:cineverse/core/routes/navigation_service.dart';
 import 'package:cineverse/config/colors/colors.dart';
@@ -10,10 +10,9 @@ import 'package:cineverse/util/mixin/underline_border.dart';
 import 'package:cineverse/widget/bottom_bar.dart';
 import 'package:cineverse/widget/card_row.dart';
 import 'package:cineverse/widget/dropdown.dart';
-import 'package:cineverse/widget/fade_text.dart';
 import 'package:cineverse/widget/loading.dart';
+import 'package:cineverse/widget/movie_results.dart';
 import 'package:cineverse/widget/search_bar.dart';
-import 'package:cineverse/widget/shimmer_image.dart';
 import 'package:cineverse/widget/tags.dart';
 import 'package:cineverse/feature_movie/domain/model/genre.dart';
 import 'package:cineverse/feature_movie/domain/model/language.dart';
@@ -23,7 +22,7 @@ import 'package:cineverse/feature_movie/domain/usecase/search_movies_use_case.da
 import 'package:cineverse/feature_movie/presentation/home_screen/cubit/home_screen_cubit.dart';
 import 'package:cineverse/feature_movie/presentation/home_screen/cubit/setup_search_cubit.dart';
 import 'package:cineverse/main.dart';
-import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -210,7 +209,9 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                         child: TagRow(tags: [
                           if (language.value != null)
                             Tag(
-                              text: language.value!.englishName,
+                              text: Languages().getDisplayLanguage(
+                                  language.value!.iso6391,
+                                  backup: language.value!.englishName),
                               closeFunction: () => language.value = null,
                             ),
                           ...genres.value.map(
@@ -229,72 +230,42 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                             ),
                           if (includeAdult.value)
                             Tag(
-                              text: "Include adult-rated",
+                              text: AppLocalizations.of(context)!.includeAdult,
                               closeFunction: () => includeAdult.value = false,
                             ),
                         ]),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomMaterialIndicator(
-                        trigger: IndicatorTrigger.trailingEdge,
-                        // indicatorBuilder: (context, controller) => Padding(
-                        //   padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                        //   child: const Loading(),
-                        // ),
-                        onRefresh: () {
-                          queryPage!.value = queryPage.value + 1;
+                    MovieResults(
+                      onRefresh: () {
+                        queryPage!.value = queryPage.value + 1;
 
-                          if (searchOrDiscover!) {
-                            return BlocProvider.of<HomeScreenCubit>(context)
-                                .searchMovies(
-                                    SearchMoviesParams(
-                                        query: searchController.text,
-                                        page: queryPage.value,
-                                        includeAdult: includeAdult.value,
-                                        language: language.value?.iso6391,
-                                        year: year.value),
-                                    true);
-                          } else {
-                            return BlocProvider.of<HomeScreenCubit>(context)
-                                .discoverMovies(
-                                    DiscoverMoviesParams(
+                        if (searchOrDiscover!) {
+                          return BlocProvider.of<HomeScreenCubit>(context)
+                              .searchMovies(
+                                  SearchMoviesParams(
+                                      query: searchController.text,
                                       page: queryPage.value,
                                       includeAdult: includeAdult.value,
                                       language: language.value?.iso6391,
-                                      genres: genres.value
-                                          .map((e) => e.id)
-                                          .toList(),
-                                      primaryReleaseYear: year.value,
-                                      sortBy: sortBy.value.snakeName,
-                                      year: year.value,
-                                    ),
-                                    true);
-                          }
-                        },
-                        child: SizedBox(
-                          height: size.height,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: GridView.count(
-                                  shrinkWrap: true,
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 1.15,
-                                  children: [
-                                    ...queryResults.map(
-                                        (movie) => shortMovieCard(movie, size)),
-                                    for (int i = 0; i < 6; i++)
-                                      // shimmerMovie(size, mini: true)
-                                      const SizedBox()
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: size.height - 650)
-                            ],
-                          ),
-                        ),
-                      ),
+                                      year: year.value),
+                                  true);
+                        } else {
+                          return BlocProvider.of<HomeScreenCubit>(context)
+                              .discoverMovies(
+                                  DiscoverMoviesParams(
+                                    page: queryPage.value,
+                                    includeAdult: includeAdult.value,
+                                    language: language.value?.iso6391,
+                                    genres:
+                                        genres.value.map((e) => e.id).toList(),
+                                    primaryReleaseYear: year.value,
+                                    sortBy: sortBy.value.snakeName,
+                                    year: year.value,
+                                  ),
+                                  true);
+                        }
+                      },
+                      movies: queryResults,
                     ),
                   ] else ...[
                     movieRow(
@@ -369,47 +340,6 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
         },
       ),
       bottomNavigationBar: const BottomBar(index: 0),
-    );
-  }
-
-  Widget shortMovieCard(Movie movie, size) {
-    return GestureDetector(
-      onTap: () => NavigationService.get()
-          .navigateTo(AppRoute.movieScreen, arguments: [movie]),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: movie.backdropPath == null
-                      ? AspectRatio(
-                          aspectRatio: 500 / 281,
-                          child: Container(
-                            color: lightNavy,
-                            child: const Center(
-                              child: Icon(Icons.image, size: 50),
-                            ),
-                          ),
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: '$kBaseImageUrl${movie.backdropPath}',
-                          placeholder: (context, _) =>
-                              const ShimmerImage(mini: true),
-                        ),
-                ),
-                const SizedBox(height: 10),
-                Text(movie.originalTitle, maxLines: 2)
-              ],
-            ),
-          ),
-          const FadeText(),
-        ],
-      ),
     );
   }
 
@@ -490,6 +420,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
                       ...state.maybeWhen<List<Widget>>(
                         loaded: (stateGenres, languages) {
                           final tempStateGenres = [...stateGenres];
+                          print('debug stateGenres: $stateGenres');
 
                           tempStateGenres.removeWhere((stateGenre) =>
                               genres.value.any((e) => stateGenre.id == e.id));
@@ -550,6 +481,15 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
     required ValueNotifier<SearchCategory?> sb,
     required ValueNotifier<bool> ia,
   }) {
+    print('debug genres: ${genres.value}');
+    print('debug tempStateGenres: $tempStateGenres');
+
+    final tempLanguages = [...languages];
+    print('debug language: ${language.value}');
+    print('debug tempLanguages: ${tempLanguages.length}');
+
+    tempLanguages.sort((a, b) => a.englishName.compareTo(b.englishName));
+
     return [
       Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -558,12 +498,24 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocalizations.of(context)!.language),
-              MyDropdown(
-                value: language.value,
+              MyDropdown<String?>(
+                value: language.value?.iso6391,
                 hint: AppLocalizations.of(context)!.selectLanguage,
-                items: languages,
-                getLabel: (lang) => lang.englishName,
-                onChanged: (newValue) => language.value = newValue,
+                items: tempLanguages.map((e) => e.iso6391).toList(),
+                getLabel: (iso) {
+                  try {
+                    return Languages().getDisplayLanguage(iso);
+                  } on Exception {
+                    final language =
+                        tempLanguages.firstWhereOrNull((e) => e.iso6391 == iso);
+                    return language?.englishName ?? "";
+                  }
+                },
+                onChanged: (newValue) {
+                  final newLang = tempLanguages
+                      .firstWhereOrNull((e) => e.iso6391 == newValue);
+                  language.value = newLang;
+                },
               ),
             ],
           ),
@@ -685,7 +637,7 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
               sc.text = searchController.text;
               l.value = language.value;
               g.value = genres.value;
-              y.value = int.parse(yearController.text);
+              y.value = int.tryParse(yearController.text);
               sb.value = sortBy.value;
               ia.value = includeAdult.value;
               pop();

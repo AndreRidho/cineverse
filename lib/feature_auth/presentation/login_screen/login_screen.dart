@@ -2,6 +2,7 @@ import 'package:cineverse/core/routes/app_route.dart';
 import 'package:cineverse/core/routes/navigation_service.dart';
 import 'package:cineverse/feature_auth/domain/use_case/log_in_use_case.dart';
 import 'package:cineverse/feature_auth/presentation/login_screen/cubit/login_screen_cubit.dart';
+import 'package:cineverse/l10n/gen_l10n/app_localizations.dart';
 import 'package:cineverse/util/mixin/dialogs.dart';
 import 'package:cineverse/widget/title.dart';
 import 'package:flutter/material.dart';
@@ -44,12 +45,12 @@ class LoginScreen extends HookWidget with Dialogs {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const MyTitle(title: 'Sign In'),
+                      MyTitle(title: AppLocalizations.of(context)!.signIn),
                       const SizedBox(height: 40),
                       TextField(
                         controller: username,
                         decoration: InputDecoration(
-                          hintText: 'Username',
+                          hintText: AppLocalizations.of(context)!.username,
                           hintStyle: TextStyle(
                             color: Colors.white.withOpacity(0.5),
                           ),
@@ -63,7 +64,8 @@ class LoginScreen extends HookWidget with Dialogs {
                               controller: password,
                               obscureText: !showPassword.value,
                               decoration: InputDecoration(
-                                hintText: 'Password',
+                                hintText:
+                                    AppLocalizations.of(context)!.password,
                                 hintStyle: TextStyle(
                                   color: Colors.white.withOpacity(0.5),
                                 ),
@@ -103,7 +105,8 @@ class LoginScreen extends HookWidget with Dialogs {
                                             ),
                                           );
                                         },
-                                  child: const Text('Log In'),
+                                  child:
+                                      Text(AppLocalizations.of(context)!.logIn),
                                 ),
                               ),
                             ],

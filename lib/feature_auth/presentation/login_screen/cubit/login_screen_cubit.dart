@@ -23,7 +23,7 @@ class LoginScreenCubit extends Cubit<LoginScreenState> {
 
     await result.fold(
       (l) async {
-        String errorMessage = 'An error occurred.a';
+        String errorMessage = 'An error occurred';
 
         if (l is NetworkFailure) {
           errorMessage = 'Please check your internet connection.';
@@ -36,7 +36,7 @@ class LoginScreenCubit extends Cubit<LoginScreenState> {
         final accountResult = await _getAccount.call(NoParams());
 
         accountResult.fold((l) {
-          String errorMessage = 'An error occurred.b';
+          String errorMessage = 'An error occurred';
 
           if (l is NetworkFailure) {
             errorMessage = 'Please check your internet connection.';

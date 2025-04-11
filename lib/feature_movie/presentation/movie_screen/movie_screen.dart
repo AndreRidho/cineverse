@@ -1,8 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cineverse/config/colors/colors.dart';
 import 'package:cineverse/core/constants/constants.dart';
+import 'package:cineverse/core/di/di.dart';
+import 'package:cineverse/core/routes/app_route.dart';
+import 'package:cineverse/core/routes/navigation_service.dart';
+import 'package:cineverse/feature_movie/presentation/movie_screen/cubit/watchlist_button_cubit.dart';
+import 'package:cineverse/l10n/gen_l10n/app_localizations.dart';
+import 'package:cineverse/util/mixin/dialogs.dart';
 import 'package:cineverse/widget/card_row.dart';
 import 'package:cineverse/widget/element_padding.dart';
+import 'package:cineverse/widget/loading.dart';
 import 'package:cineverse/widget/tags.dart';
 import 'package:cineverse/widget/title.dart';
 import 'package:cineverse/feature_movie/domain/model/actor.dart';
@@ -11,9 +18,10 @@ import 'package:cineverse/feature_movie/presentation/movie_screen/cubit/movie_sc
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
-class MovieScreen extends StatelessWidget {
+class MovieScreen extends StatelessWidget with Dialogs {
   const MovieScreen({super.key, required this.movie});
 
   final Movie movie;
@@ -137,7 +145,8 @@ class MovieScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Text('$reviews reviews'),
+                                Text(
+                                    '$reviews ${AppLocalizations.of(context)!.reviews}'),
                               ],
                             ))
                           ],
@@ -147,7 +156,7 @@ class MovieScreen extends StatelessWidget {
                     ElementPadding(widget: Text(movie.overview)),
                     const SizedBox(height: 20),
                     CardRow<Actor>(
-                      title: 'Cast & Crew',
+                      title: AppLocalizations.of(context)!.castCrew,
                       items: state.maybeWhen(
                           loaded: (actors, movie, genres) {
                             return actors;
@@ -165,23 +174,70 @@ class MovieScreen extends StatelessWidget {
               );
             },
           ),
-          Positioned(
-            bottom: 30,
-            right: 30,
-            left: 30,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: lightNavy, borderRadius: BorderRadius.circular(20)),
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.bookmark_outline_rounded),
-                    Text('Add to Watchlist')
-                  ],
-                ),
-              ),
+          BlocProvider(
+            create: (context) =>
+                sl<WatchlistButtonCubit>()..watchlistOrNot(movie.id),
+            child: BlocConsumer<WatchlistButtonCubit, WatchlistButtonState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  error: (errorMessage) => snackMessage(context, errorMessage),
+                  unauth: () async {
+                    final prefs = sl<SharedPreferences>();
+
+                    await prefs.remove(kSessionId);
+                    await prefs.remove(kAccountId);
+
+                    NavigationService.get()
+                        .navigateTo(AppRoute.loginScreen, popAll: true);
+                  },
+                  orElse: () {},
+                );
+              },
+              builder: (context, state) {
+                return state.maybeWhen(
+                  error: (errorMessage) => const SizedBox(),
+                  orElse: () => Positioned(
+                    bottom: 30,
+                    right: 30,
+                    left: 30,
+                    child: InkWell(
+                      onTap: () {
+                        state.maybeWhen(
+                            orElse: () {},
+                            loaded: (inWatchlist) {
+                              BlocProvider.of<WatchlistButtonCubit>(context)
+                                  .editList(!inWatchlist, movie.id);
+                            });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: lightNavy,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: state.maybeWhen(
+                              orElse: () => [const Loading()],
+                              loaded: (inWatchlist) => [
+                                Icon(inWatchlist
+                                    ? Icons.bookmark_rounded
+                                    : Icons.bookmark_outline_rounded),
+                                const SizedBox(width: 7),
+                                Text(inWatchlist
+                                    ? AppLocalizations.of(context)!
+                                        .addToWatchList
+                                    : AppLocalizations.of(context)!
+                                        .removeFromWatchList)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],

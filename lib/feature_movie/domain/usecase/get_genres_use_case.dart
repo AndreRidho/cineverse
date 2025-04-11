@@ -16,10 +16,10 @@ class GetGenresUseCase implements UseCase<List<Genre>, GetGenresParams> {
 }
 
 class GetGenresParams extends Equatable {
-  final String language;
+  final String? language;
 
-  const GetGenresParams({this.language = 'en'});
+  const GetGenresParams({this.language});
 
   @override
-  List<Object?> get props => [language];
+  List<Object?> get props => [];
 }

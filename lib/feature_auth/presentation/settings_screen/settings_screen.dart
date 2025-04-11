@@ -81,23 +81,24 @@ class SettingsScreen extends StatelessWidget with Dialogs {
                         onTap: () {
                           alertDialog(
                             context,
-                            message: 'Are you sure you want to log out?',
-                            leftText: 'Cancel',
-                            rightText: 'Log out',
+                            message: AppLocalizations.of(context)!
+                                .logoutConfirmation,
+                            leftText: AppLocalizations.of(context)!.cancel,
+                            rightText: AppLocalizations.of(context)!.logout,
                             rightAction: () {
                               BlocProvider.of<SettingsScreenCubit>(context)
                                   .logOut();
                             },
                           );
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.all(20),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Log out',
-                                style: TextStyle(color: Colors.red),
+                                AppLocalizations.of(context)!.logout,
+                                style: const TextStyle(color: Colors.red),
                               )
                             ],
                           ),

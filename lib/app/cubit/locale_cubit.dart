@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:cineverse/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'locale_state.dart';
@@ -13,7 +15,7 @@ class LocaleCubit extends Cubit<LocaleState> {
 
   Future<void> get() async {
     emit(const LocaleState.loading());
-    final locale = prefs.getString('locale');
+    final locale = prefs.getString(kLocale);
     print('debug cubit get $locale');
     emit(LocaleState.loaded(Locale(locale ?? 'en')));
   }
@@ -21,8 +23,8 @@ class LocaleCubit extends Cubit<LocaleState> {
   Future<void> set(String localeString) async {
     emit(const LocaleState.loading());
     print('debug cubit a $localeString');
-    await prefs.setString('locale', localeString);
-    print('debug cubit b ${prefs.getString('locale')}');
-    await get();
+    await prefs.setString(kLocale, localeString);
+    print('debug cubit b ${prefs.getString(kLocale)}');
+    Restart.restartApp();
   }
 }

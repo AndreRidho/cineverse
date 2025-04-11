@@ -23,7 +23,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, Account>> getAccount(NoParams params) async {
     try {
-      final sessionId = _prefs.getString('sessionId');
+      final sessionId = _prefs.getString(kSessionId);
 
       if (sessionId == null) {
         return Left(UnauthenticatedFailure());
@@ -39,9 +39,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return Left(NetworkFailure());
     } on CacheException {
-      return const Left(ExceptionFailure("An error occurred.e"));
+      return const Left(ExceptionFailure("An error occurred"));
     } catch (e) {
-      return const Left(ExceptionFailure("An error occurred.f"));
+      return const Left(ExceptionFailure("An error occurred"));
     }
   }
 
@@ -66,7 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
       print('debug repo d');
       await _getAndSetAccountId(sessionId);
 
-      await _prefs.setString('sessionId', sessionId);
+      await _prefs.setString(kSessionId, sessionId);
 
       return const Right(null);
     } on DioException catch (e) {
@@ -76,7 +76,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return Left(NetworkFailure());
     } on CacheException {
-      return const Left(ExceptionFailure("An error occurred.c"));
+      return const Left(ExceptionFailure("An error occurred"));
     } catch (e) {
       return Left(ExceptionFailure(e.toString()));
     }
@@ -88,7 +88,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
     final account = AccountDto.fromJson(getAccountDetailsResult);
 
-    await _prefs.setInt('accountId', account.id);
+    await _prefs.setInt(kAccountId, account.id);
 
     return account.toEntity().toModel();
   }
@@ -96,9 +96,9 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> logout(NoParams params) async {
     try {
-      final result = await _prefs.remove('accountId') &&
-          await _prefs.remove('sessionId') &&
-          await _prefs.remove('locale');
+      final result = await _prefs.remove(kAccountId) &&
+          await _prefs.remove(kSessionId) &&
+          await _prefs.remove(kLocale);
 
       if (result) {
         return const Right(null);

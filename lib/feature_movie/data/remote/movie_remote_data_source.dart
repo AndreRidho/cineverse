@@ -18,6 +18,7 @@ abstract class MovieRemoteDataSource {
     @Query('language') String language = "en-US",
     @Query('sort_by') String sortBy = "created_at.asc",
     @Query('page') int page = 1,
+    @Header('Authorization') String auth = 'Bearer $kAccessToken',
   });
 
   @POST('/account/{account_id}/watchlist')
@@ -25,6 +26,7 @@ abstract class MovieRemoteDataSource {
     @Path('account_id') required String accountId,
     @Query('session_id') required String sessionId,
     @Body() required Map<String, dynamic> watchlistData,
+    @Header('Authorization') String auth = 'Bearer $kAccessToken',
   });
 
   @GET('/account/{account_id}/favorite/movies')
@@ -34,6 +36,7 @@ abstract class MovieRemoteDataSource {
     @Query('language') String language = "en-US",
     @Query('sort_by') String sortBy = "created_at.asc",
     @Query('page') int page = 1,
+    @Header('Authorization') String auth = 'Bearer $kAccessToken',
   });
 
   @POST('/account/{account_id}/favorite')
@@ -41,6 +44,15 @@ abstract class MovieRemoteDataSource {
     @Path('account_id') required String accountId,
     @Query('session_id') required String sessionId,
     @Body() required Map<String, dynamic> favoriteData,
+    @Header('Authorization') String auth = 'Bearer $kAccessToken',
+  });
+
+  @GET('/movie/{movie_id}/account_states')
+  Future getAccountStates(
+    @Path('movie_id') int movieId, {
+    @Query('api_key') String apiKey = kApiKey,
+    @Query('session_id') required String sessionId,
+    @Header('Authorization') String auth = 'Bearer $kAccessToken',
   });
 
   // Movies - Home Screen

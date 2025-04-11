@@ -17,11 +17,10 @@ class SetupSearchCubit extends Cubit<SetupSearchState> {
   final GetGenresUseCase _getGenres;
   final GetLanguagesUseCase _getLanguages;
 
-  Future<void> getGenresAndLanguages({String? language}) async {
+  Future<void> getGenresAndLanguages() async {
     emit(const SetupSearchState.loading());
 
-    final genresResult =
-        await _getGenres(GetGenresParams(language: language ?? "en"));
+    final genresResult = await _getGenres(GetGenresParams());
     final languagesResult = await _getLanguages(NoParams());
 
     print('debug genre cubit');
@@ -49,7 +48,7 @@ class SetupSearchCubit extends Cubit<SetupSearchState> {
       return;
     }
 
-    print('debug genre success');
+    print('debug genre success $genresResult');
 
     // Extract the successful results
     final genres = genresResult.getOrElse(() => []);

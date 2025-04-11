@@ -53,6 +53,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addToWatchList => 'Add to Watchlist';
 
   @override
+  String get removeFromWatchList => 'Remove from Watchlist';
+
+  @override
   String get back => 'Back';
 
   @override
@@ -108,4 +111,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voteCount => 'Vote Count';
+
+  @override
+  String get logoutConfirmation => 'Are you sure you want to log out?';
+
+  @override
+  String get logout => 'Log out';
+
+  @override
+  String get signIn => 'Sign In';
+
+  @override
+  String get username => 'Username';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get logIn => 'Log In';
 }

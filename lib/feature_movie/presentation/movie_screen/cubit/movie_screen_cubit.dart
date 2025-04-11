@@ -25,7 +25,7 @@ class MovieScreenCubit extends Cubit<MovieScreenState> {
     final getActorsResult = await _getActors(GetActorsParams(movieId: movieId));
     final getMoviesDetailsResult =
         await _getMovieDetails(GetMovieDetailsParams(movieId: movieId));
-    final getGenresResult = await _getGenres(const GetGenresParams());
+    final getGenresResult = await _getGenres(GetGenresParams());
 
     final actors = getActorsResult.fold((l) => null, (r) => r);
     print('debug cubit actors $actors');

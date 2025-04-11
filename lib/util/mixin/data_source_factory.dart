@@ -30,18 +30,23 @@ mixin DataSourceFactory {
       // print('debug dsf d $dtos');
       final entities = dtos.map((e) => toEntity(e)).toList();
 
-      // print('debug dsf d $entities');
-      // print('debug dsf e');
+      print('debug dsfcheck d $entities');
+      print('debug dsfcheck apiKey $apiKey');
+      print('debug dsfcheck apiName $apiName');
+      print('debug dsfcheck entities $entities');
       clear(apiKey);
 
-      // print('debug dsf f');
       save(apiName, apiKey, entities);
 
-      // print('debug dsf g');
-      return local(apiKey);
+      final result = local(apiKey);
+
+      print('debug dsfcheck g $result');
+      return result;
     } on DioException {
       // print('debug dsf h');
       return local(apiKey);
+    } on UnauthenticatedException {
+      return Left(UnauthenticatedFailure());
     } on CacheException {
       return const Right([]);
     } catch (e) {

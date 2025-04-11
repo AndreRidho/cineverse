@@ -1,7 +1,7 @@
 import 'package:cineverse/config/colors/colors.dart';
 import 'package:flutter/material.dart';
 
-class MyDropdown<Item, ItemId> extends StatelessWidget {
+class MyDropdown<Item> extends StatelessWidget {
   final Item? value;
   final String hint;
   final List<Item> items;

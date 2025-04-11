@@ -31,23 +31,23 @@ class Actor implements Equatable {
 
   @override
   List<Object?> get props => [
-        [
-          id,
-          adult,
-          gender,
-          knownForDepartment,
-          name,
-          originalName,
-          popularity,
-          profilePath,
-          castId,
-          character,
-          creditId,
-          // order
-        ]
+        id,
+        adult,
+        gender,
+        knownForDepartment,
+        name,
+        originalName,
+        popularity,
+        profilePath,
+        castId,
+        character,
+        creditId,
+        // order
       ];
 
   @override
-  // TODO: implement stringify
-  bool? get stringify => throw UnimplementedError();
+  bool? get stringify => true;
+
+  @override
+  String toString() => 'Actor(id: $id, name: $name, character: $character)';
 }

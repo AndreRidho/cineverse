@@ -8,6 +8,7 @@ import 'package:cineverse/feature_auth/domain/repository/auth_repository.dart';
 import 'package:cineverse/feature_auth/domain/use_case/get_account_use_case.dart';
 import 'package:cineverse/feature_auth/domain/use_case/log_in_use_case.dart';
 import 'package:cineverse/feature_auth/domain/use_case/log_out_use_case.dart';
+import 'package:cineverse/feature_auth/presentation/account_screen/cubit/account_screen_cubit.dart';
 import 'package:cineverse/feature_auth/presentation/login_screen/cubit/login_screen_cubit.dart';
 import 'package:cineverse/feature_auth/presentation/settings_screen/cubit/settings_screen_cubit.dart';
 import 'package:cineverse/feature_movie/data/local/cache/actor_cache_entity.dart';
@@ -22,15 +23,20 @@ import 'package:cineverse/feature_movie/data/remote/movie_remote_data_source.dar
 import 'package:cineverse/feature_movie/data/repository/movie_repository_impl.dart';
 import 'package:cineverse/feature_movie/domain/repository/movie_repository.dart';
 import 'package:cineverse/feature_movie/domain/usecase/discover_movies_use_case.dart';
+import 'package:cineverse/feature_movie/domain/usecase/edit_list_use_case.dart';
 import 'package:cineverse/feature_movie/domain/usecase/get_actors_use_case.dart';
 import 'package:cineverse/feature_movie/domain/usecase/get_genres_use_case.dart';
 import 'package:cineverse/feature_movie/domain/usecase/get_languages_use_case.dart';
 import 'package:cineverse/feature_movie/domain/usecase/get_movie_details_use_case.dart';
+import 'package:cineverse/feature_movie/domain/usecase/get_movie_state_use_case.dart';
 import 'package:cineverse/feature_movie/domain/usecase/get_movies_use_case.dart';
+import 'package:cineverse/feature_movie/domain/usecase/get_watchlist_movies_use_case.dart';
 import 'package:cineverse/feature_movie/domain/usecase/search_movies_use_case.dart';
 import 'package:cineverse/feature_movie/presentation/home_screen/cubit/home_screen_cubit.dart';
 import 'package:cineverse/feature_movie/presentation/home_screen/cubit/setup_search_cubit.dart';
 import 'package:cineverse/feature_movie/presentation/movie_screen/cubit/movie_screen_cubit.dart';
+import 'package:cineverse/feature_movie/presentation/movie_screen/cubit/watchlist_button_cubit.dart';
+import 'package:cineverse/feature_movie/presentation/my_list_screen/cubit/my_list_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:objectbox/objectbox.dart';
@@ -109,6 +115,7 @@ void repositories(GetIt sl) {
       genreLocal: sl(),
       actorLocal: sl(),
       languageLocal: sl(),
+      prefs: sl(),
     ),
   );
   sl.registerLazySingleton<AuthRepository>(
@@ -127,6 +134,9 @@ void useCases(GetIt sl) {
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => GetAccountUseCase(sl()));
   sl.registerLazySingleton(() => LogOutUseCase(sl()));
+  sl.registerLazySingleton(() => GetWatchListMoviesUseCase(sl()));
+  sl.registerLazySingleton(() => EditListUseCase(sl()));
+  sl.registerLazySingleton(() => GetMovieStateUseCase(sl()));
 }
 
 void blocs(GetIt sl) {
@@ -137,4 +147,7 @@ void blocs(GetIt sl) {
   sl.registerFactory(() => SplashScreenCubit(sl()));
   sl.registerFactory(() => LoginScreenCubit(sl(), sl()));
   sl.registerFactory(() => SettingsScreenCubit(sl()));
+  sl.registerFactory(() => WatchlistButtonCubit(sl(), sl()));
+  sl.registerFactory(() => MyListScreenCubit(sl()));
+  sl.registerFactory(() => AccountScreenCubit(sl()));
 }

@@ -15,8 +15,12 @@ class GenreLocalDataSource
     final existingGenres =
         allCachesPages.expand((e) => e.genres).map((e) => e.id).toSet();
 
+    print('debug genre ds existingGenres $existingGenres');
+
     final newGenres =
         entities.where((e) => !existingGenres.contains(e.id)).toList();
+
+    print('debug genre ds newGenres $newGenres');
 
     var genreCache = cacheBox.get(apiKey.hashCode);
 

@@ -53,6 +53,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addToWatchList => 'أضف إلى قائمة المشاهدة';
 
   @override
+  String get removeFromWatchList => 'إزالة من قائمة المشاهدة';
+
+  @override
   String get back => 'رجوع';
 
   @override
@@ -108,4 +111,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get voteCount => 'عدد الأصوات';
+
+  @override
+  String get logoutConfirmation => 'هل أنت متأكد أنك تريد تسجيل الخروج؟';
+
+  @override
+  String get logout => 'تسجيل الخروج';
+
+  @override
+  String get signIn => 'تسجيل الدخول';
+
+  @override
+  String get username => 'اسم المستخدم';
+
+  @override
+  String get password => 'كلمة المرور';
+
+  @override
+  String get logIn => 'تسجيل الدخول';
 }

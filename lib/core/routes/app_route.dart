@@ -65,7 +65,7 @@ class AppRoute {
   final _accountRoute = MaterialPageRoute(
     builder: (context) {
       return BlocProvider<AccountScreenCubit>(
-        create: (context) => sl<AccountScreenCubit>(),
+        create: (context) => sl<AccountScreenCubit>()..get(),
         child: const AccountScreen(),
       );
     },
@@ -74,7 +74,7 @@ class AppRoute {
   final _myListRoute = MaterialPageRoute(
     builder: (context) {
       return BlocProvider<MyListScreenCubit>(
-        create: (context) => sl<MyListScreenCubit>(),
+        create: (context) => sl<MyListScreenCubit>()..get(),
         child: const MyListScreen(),
       );
     },

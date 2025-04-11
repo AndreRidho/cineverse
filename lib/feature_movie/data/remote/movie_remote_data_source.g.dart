@@ -28,6 +28,7 @@ class _MovieRemoteDataSource implements MovieRemoteDataSource {
     String language = "en-US",
     String sortBy = "created_at.asc",
     int page = 1,
+    String auth = 'Bearer $kAccessToken',
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -36,7 +37,8 @@ class _MovieRemoteDataSource implements MovieRemoteDataSource {
       r'sort_by': sortBy,
       r'page': page,
     };
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': auth};
+    _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<dynamic>(Options(
       method: 'GET',
@@ -64,10 +66,12 @@ class _MovieRemoteDataSource implements MovieRemoteDataSource {
     required String accountId,
     required String sessionId,
     required Map<String, dynamic> watchlistData,
+    String auth = 'Bearer $kAccessToken',
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'session_id': sessionId};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': auth};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(watchlistData);
     final _options = _setStreamType<dynamic>(Options(
@@ -98,6 +102,7 @@ class _MovieRemoteDataSource implements MovieRemoteDataSource {
     String language = "en-US",
     String sortBy = "created_at.asc",
     int page = 1,
+    String auth = 'Bearer $kAccessToken',
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -106,7 +111,8 @@ class _MovieRemoteDataSource implements MovieRemoteDataSource {
       r'sort_by': sortBy,
       r'page': page,
     };
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': auth};
+    _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<dynamic>(Options(
       method: 'GET',
@@ -134,10 +140,12 @@ class _MovieRemoteDataSource implements MovieRemoteDataSource {
     required String accountId,
     required String sessionId,
     required Map<String, dynamic> favoriteData,
+    String auth = 'Bearer $kAccessToken',
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'session_id': sessionId};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': auth};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(favoriteData);
     final _options = _setStreamType<dynamic>(Options(
@@ -148,6 +156,42 @@ class _MovieRemoteDataSource implements MovieRemoteDataSource {
         .compose(
           _dio.options,
           '/account/${accountId}/favorite',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> getAccountStates(
+    int movieId, {
+    String apiKey = kApiKey,
+    required String sessionId,
+    String auth = 'Bearer $kAccessToken',
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'api_key': apiKey,
+      r'session_id': sessionId,
+    };
+    final _headers = <String, dynamic>{r'Authorization': auth};
+    _headers.removeWhere((k, v) => v == null);
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/movie/${movieId}/account_states',
           queryParameters: queryParameters,
           data: _data,
         )

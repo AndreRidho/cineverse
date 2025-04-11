@@ -1,10 +1,9 @@
 part of 'account_screen_cubit.dart';
 
-sealed class AccountScreenState extends Equatable {
-  const AccountScreenState();
-
-  @override
-  List<Object> get props => [];
+@freezed
+class AccountScreenState with _$AccountScreenState {
+  const factory AccountScreenState.loading() = _Loading;
+  const factory AccountScreenState.loaded(Account account) = _Loaded;
+  const factory AccountScreenState.unauth() = _Unauth;
+  const factory AccountScreenState.error(String errorMessage) = _Error;
 }
-
-final class AccountScreenInitial extends AccountScreenState {}

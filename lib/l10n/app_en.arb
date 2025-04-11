@@ -15,6 +15,7 @@
   "reviews": "Reviews",
   "castCrew": "Cast & Crew",
   "addToWatchList": "Add to Watchlist",
+  "removeFromWatchList": "Remove from Watchlist",
   "back": "Back",
   "apply": "Apply",
   "language": "Language",
@@ -33,5 +34,11 @@
   "releaseDate": "Release Date",
   "revenue": "Revenue",
   "voteAverage": "Vote Average",
-  "voteCount": "Vote Count"
+  "voteCount": "Vote Count",
+  "logoutConfirmation": "Are you sure you want to log out?",
+  "logout": "Log out",
+  "signIn": "Sign In",
+  "username": "Username",
+  "password": "Password",
+  "logIn": "Log In"
 }

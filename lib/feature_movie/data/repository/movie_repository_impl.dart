@@ -1,5 +1,8 @@
+import 'package:cineverse/core/constants/constants.dart';
 import 'package:cineverse/core/error/exceptions.dart';
 import 'package:cineverse/core/error/failure.dart';
+import 'package:cineverse/feature_movie/domain/usecase/edit_list_use_case.dart';
+import 'package:cineverse/feature_movie/domain/usecase/get_movie_state_use_case.dart';
 import 'package:cineverse/util/mixin/data_source_factory.dart';
 import 'package:cineverse/core/use_case/use_case.dart';
 import 'package:cineverse/feature_movie/data/local/data_source/actor_local_data_source.dart';
@@ -28,6 +31,8 @@ import 'package:cineverse/feature_movie/domain/usecase/get_movies_use_case.dart'
 import 'package:cineverse/feature_movie/domain/usecase/search_movies_use_case.dart';
 import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
   final MovieRemoteDataSource _remote;
@@ -35,18 +40,21 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
   final GenreLocalDataSource _genreLocal;
   final ActorLocalDataSource _actorLocal;
   final LanguageLocalDataSource _languageLocal;
+  final SharedPreferences _prefs;
 
   MovieRepositoryImpl(
       {required MovieRemoteDataSource remote,
       required MovieLocalDataSource movieLocal,
       required GenreLocalDataSource genreLocal,
       required ActorLocalDataSource actorLocal,
-      required LanguageLocalDataSource languageLocal})
+      required LanguageLocalDataSource languageLocal,
+      required SharedPreferences prefs})
       : _remote = remote,
         _movieLocal = movieLocal,
         _genreLocal = genreLocal,
         _actorLocal = actorLocal,
-        _languageLocal = languageLocal;
+        _languageLocal = languageLocal,
+        _prefs = prefs;
 
   @override
   Future<Either<Failure, List<Movie>>> getMovies(GetMoviesParams params) async {
@@ -61,7 +69,11 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
 
         return Right(cache.movies.map((e) => e.toModel()).toList());
       },
-      clear: _movieLocal.clearCache,
+      clear: (apiKey) {
+        print('debug clear a');
+        _movieLocal.clearCache(apiKey);
+        print('debug clear b');
+      },
       remote: (apiKey) async {
         dynamic result;
 
@@ -93,7 +105,8 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
   Future<Either<Failure, List<Movie>>> discoverMovies(
       DiscoverMoviesParams params) async {
     return dataSourceFactory<MovieDto, MovieEntity, Movie>(
-      apiName: 'discoverMovies',
+      apiName:
+          'discoverMovies${params.genres}${params.primaryReleaseYear}${params.sortBy}${params.includeAdult}${params.language}',
       paramsString: params.toString(),
       checkCacheValidity: _movieLocal.isCacheValid,
       local: (apiKey) {
@@ -113,7 +126,7 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
           includeAdult: params.includeAdult,
           page: params.page,
           withGenres: params.genres?.join(','),
-          year: params.year,
+          year: params.primaryReleaseYear,
         );
 
         return (result['results'] as List)
@@ -128,7 +141,8 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
   @override
   Future<Either<Failure, List<Movie>>> searchMovies(SearchMoviesParams params) {
     return dataSourceFactory<MovieDto, MovieEntity, Movie>(
-      apiName: 'searchMovies${params.query}',
+      apiName:
+          'searchMovies${params.query}${params.includeAdult}${params.language}',
       paramsString: params.toString(),
       checkCacheValidity: _movieLocal.isCacheValid,
       local: (apiKey) {
@@ -175,22 +189,30 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
 
         if (cache == null) throw CacheException();
 
-        return Right(cache.genres.map((e) => e.toModel()).toList());
+        final genres = cache.genres.map((e) => e.toModel()).toList();
+
+        print("debug local $genres");
+
+        return Right(genres);
       },
       clear: _genreLocal.clearCache,
       remote: (apiKey) async {
-        print("debug remote a");
-        dynamic result;
+        final language = _prefs.getString(kLocale);
+        print("debug remote a $language");
 
-        result = await _remote.getMovieGenres(language: params.language);
+        final result = await _remote.getMovieGenres(language: language ?? 'en');
 
         print("debug remote b");
-        return (result['genres'] as List).map((e) {
+        final genres = (result['genres'] as List).map((e) {
           print("debug remote c");
           final genre = GenreDto.fromJson(e);
           print("debug remote d");
           return genre;
         }).toList();
+
+        print("debug remote e $genres");
+
+        return genres;
       },
       toEntity: (e) => e.toEntity(),
       save: _genreLocal.saveEntityCache,
@@ -276,5 +298,112 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
       toEntity: (e) => e.toEntity(),
       save: _movieLocal.saveEntityCache,
     );
+  }
+
+  @override
+  Future<Either<Failure, void>> editList(EditListParams params) async {
+    try {
+      final sessionId = _prefs.getString(kSessionId);
+      final accountId = _prefs.getInt('accountId');
+
+      if (sessionId == null || accountId == null) {
+        return Left(UnauthenticatedFailure());
+      } else {
+        final result = await _remote.addToWatchlist(
+          accountId: accountId.toString(),
+          sessionId: sessionId,
+          watchlistData: {
+            "media_type": "movie",
+            "media_id": params.movieId,
+            "watchlist": params.addOrRemove,
+          },
+        );
+
+        if (result['success']) {
+          return const Right(null);
+        } else {
+          return Left(ExceptionFailure(result['status_message']));
+        }
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Left(UnauthenticatedFailure());
+      }
+
+      if (e.response?.statusCode == 404) {
+        return const Left(ExceptionFailure('Movie does not exist.'));
+      }
+
+      return Left(NetworkFailure());
+    } on CacheException {
+      return const Left(ExceptionFailure("An error occurred."));
+    } catch (e) {
+      return const Left(ExceptionFailure("An error occurred."));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Movie>>> getWatchListMovies(
+      NoParams params) async {
+    try {
+      final accountId = _prefs.getInt(kAccountId);
+      final sessionId = _prefs.getString(kSessionId);
+
+      if (sessionId == null || accountId == null) {
+        return Left(UnauthenticatedFailure());
+      } else {
+        final result = await _remote.getWatchlistMovies(
+            accountId: accountId.toString(), sessionId: sessionId);
+
+        return Right((result['results'] as List)
+            .map((e) => MovieDto.fromJson(e).toEntity().toModel())
+            .toList());
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Left(UnauthenticatedFailure());
+      }
+
+      if (e.response?.statusCode == 404) {
+        return const Left(ExceptionFailure('Movie does not exist.'));
+      }
+
+      return Left(NetworkFailure());
+    } on CacheException {
+      return const Left(ExceptionFailure("An error occurred."));
+    } catch (e) {
+      return const Left(ExceptionFailure("An error occurred."));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> getMovieState(
+      GetMovieStateParams params) async {
+    try {
+      final sessionId = _prefs.getString(kSessionId);
+
+      if (sessionId == null) {
+        return Left(UnauthenticatedFailure());
+      } else {
+        final result = await _remote.getAccountStates(params.movieId,
+            sessionId: sessionId);
+
+        return Right(result['watchlist'] as bool);
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Left(UnauthenticatedFailure());
+      }
+
+      if (e.response?.statusCode == 404) {
+        return const Left(ExceptionFailure('Movie does not exist.'));
+      }
+
+      return Left(NetworkFailure());
+    } on CacheException {
+      return const Left(ExceptionFailure("An error occurred"));
+    } catch (e) {
+      return const Left(ExceptionFailure("An error occurred"));
+    }
   }
 }
