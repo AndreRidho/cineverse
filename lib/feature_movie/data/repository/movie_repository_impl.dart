@@ -262,7 +262,7 @@ class MovieRepositoryImpl with DataSourceFactory implements MovieRepository {
   Future<Either<Failure, Movie>> getMovieDetails(
       GetMovieDetailsParams params) async {
     return singleDataSourceFactory<MovieDto, MovieEntity, Movie>(
-      apiName: 'getMovieDetails',
+      apiName: 'getMovieDetails?${params.movieId}',
       paramsString: params.toString(),
       checkCacheValidity: _movieLocal.isCacheValid,
       local: (apiKey) {

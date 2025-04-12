@@ -81,7 +81,7 @@ class MovieScreen extends StatelessWidget with Dialogs {
                     ElementPadding(
                         widget: Row(
                       children: [
-                        MyTitle(title: movie.title),
+                        Expanded(child: MyTitle(title: movie.title)),
                         state.maybeWhen(
                           loaded: (actors, movie, genres) {
                             if (movie == null || !movie.adult) {
@@ -226,9 +226,9 @@ class MovieScreen extends StatelessWidget with Dialogs {
                                 const SizedBox(width: 7),
                                 Text(inWatchlist
                                     ? AppLocalizations.of(context)!
-                                        .addToWatchList
+                                        .removeFromWatchList
                                     : AppLocalizations.of(context)!
-                                        .removeFromWatchList)
+                                        .addToWatchList)
                               ],
                             ),
                           ),

@@ -16,32 +16,20 @@ class MovieResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: CustomMaterialIndicator(
         trigger: IndicatorTrigger.trailingEdge,
         onRefresh: onRefresh,
-        child: SizedBox(
-          height: size.height,
-          child: Column(
-            children: [
-              Expanded(
-                child: GridView.count(
-                  shrinkWrap: true,
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.15,
-                  children: [
-                    ...movies.map((movie) => ShortMovieCard(
-                        movie: movie, onReturnFromMovie: onReturnFromMovie)),
-                    for (int i = 0; i < 6; i++) const SizedBox()
-                  ],
-                ),
-              ),
-              // SizedBox(height: size.height - 650)
-            ],
-          ),
+        child: GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 2,
+          childAspectRatio: 1.15,
+          children: [
+            ...movies.map((movie) => ShortMovieCard(
+                movie: movie, onReturnFromMovie: onReturnFromMovie)),
+            // for (int i = 0; i < 6; i++) const SizedBox()
+          ],
         ),
       ),
     );

@@ -63,6 +63,9 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
     var size = MediaQuery.of(context).size;
 
     useEffect(() {
+      searchPage.value = 1;
+      discoverPage.value = 1;
+
       if (searchController.text.isEmpty) {
         BlocProvider.of<HomeScreenCubit>(context)
             .discoverMovies(DiscoverMoviesParams(
@@ -169,172 +172,181 @@ class HomeScreen extends HookWidget with Dialogs, UnderlineBorder {
 
               return BlocProvider.of<HomeScreenCubit>(context).getMovies();
             },
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 25),
-                    child: MySearchBar(
-                      searchController: searchController,
-                      suffixIcon: Icons.sort_rounded,
-                      showPrefix: searchController.text.isNotEmpty,
-                      prefixFunc: () => searchController.text = '',
-                      suffixFunc: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return searchDialog(
-                              searchController,
-                              language,
-                              genres,
-                              year,
-                              sortBy,
-                              sortDirection,
-                              includeAdult,
-                            );
-                          },
-                        );
-                      },
-                    ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 25),
+                  child: MySearchBar(
+                    searchController: searchController,
+                    suffixIcon: Icons.sort_rounded,
+                    showPrefix: searchController.text.isNotEmpty,
+                    prefixFunc: () => searchController.text = '',
+                    suffixFunc: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return searchDialog(
+                            searchController,
+                            language,
+                            genres,
+                            year,
+                            sortBy,
+                            sortDirection,
+                            includeAdult,
+                          );
+                        },
+                      );
+                    },
                   ),
-                  if (queryResults != null) ...[
-                    if ((language.value != null ||
+                ),
+                if (queryResults != null &&
+                    ((language.value != null ||
                         genres.value.isNotEmpty ||
                         year.value != null ||
-                        includeAdult.value))
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: TagRow(tags: [
-                          if (language.value != null)
-                            Tag(
-                              text: Languages().getDisplayLanguage(
-                                  language.value!.iso6391,
-                                  backup: language.value!.englishName),
-                              closeFunction: () => language.value = null,
-                            ),
-                          ...genres.value.map(
-                            (genre) => Tag(
-                                text: genre.name,
-                                closeFunction: () {
-                                  final tempList = [...genres.value];
-                                  tempList.remove(genre);
-                                  genres.value = tempList;
-                                }),
-                          ),
-                          if (year.value != null)
-                            Tag(
-                              text: year.value!.toString(),
-                              closeFunction: () => year.value = null,
-                            ),
-                          if (includeAdult.value)
-                            Tag(
-                              text: AppLocalizations.of(context)!.includeAdult,
-                              closeFunction: () => includeAdult.value = false,
-                            ),
-                        ]),
+                        includeAdult.value)))
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TagRow(tags: [
+                      if (language.value != null)
+                        Tag(
+                          text: Languages().getDisplayLanguage(
+                              language.value!.iso6391,
+                              backup: language.value!.englishName),
+                          closeFunction: () => language.value = null,
+                        ),
+                      ...genres.value.map(
+                        (genre) => Tag(
+                            text: genre.name,
+                            closeFunction: () {
+                              final tempList = [...genres.value];
+                              tempList.remove(genre);
+                              genres.value = tempList;
+                            }),
                       ),
-                    MovieResults(
-                      onRefresh: () {
-                        queryPage!.value = queryPage.value + 1;
+                      if (year.value != null)
+                        Tag(
+                          text: year.value!.toString(),
+                          closeFunction: () => year.value = null,
+                        ),
+                      if (includeAdult.value)
+                        Tag(
+                          text: AppLocalizations.of(context)!.includeAdult,
+                          closeFunction: () => includeAdult.value = false,
+                        ),
+                    ]),
+                  ),
+                Expanded(
+                  child: queryResults != null
+                      ? MovieResults(
+                          onRefresh: () {
+                            queryPage!.value = queryPage.value + 1;
 
-                        if (searchOrDiscover!) {
-                          return BlocProvider.of<HomeScreenCubit>(context)
-                              .searchMovies(
-                                  SearchMoviesParams(
-                                      query: searchController.text,
-                                      page: queryPage.value,
-                                      includeAdult: includeAdult.value,
-                                      language: language.value?.iso6391,
-                                      year: year.value),
-                                  true);
-                        } else {
-                          return BlocProvider.of<HomeScreenCubit>(context)
-                              .discoverMovies(
-                                  DiscoverMoviesParams(
-                                    page: queryPage.value,
-                                    includeAdult: includeAdult.value,
-                                    language: language.value?.iso6391,
-                                    genres:
-                                        genres.value.map((e) => e.id).toList(),
-                                    primaryReleaseYear: year.value,
-                                    sortBy: sortBy.value.snakeName,
-                                    year: year.value,
-                                  ),
-                                  true);
-                        }
-                      },
-                      movies: queryResults,
-                    ),
-                  ] else ...[
-                    movieRow(
-                      context,
-                      size,
-                      AppLocalizations.of(context)!.popular,
-                      popular.value,
-                      popularPage,
-                      (page) {
-                        return BlocProvider.of<HomeScreenCubit>(context)
-                            .getMovies(
-                          getNowPlaying: false,
-                          getTopRated: false,
-                          getUpcoming: false,
-                          popularPage: page,
-                        );
-                      },
-                    ),
-                    movieRow(
-                      context,
-                      size,
-                      AppLocalizations.of(context)!.upcoming,
-                      upcoming.value,
-                      upcomingPage,
-                      (page) {
-                        return BlocProvider.of<HomeScreenCubit>(context)
-                            .getMovies(
-                          getNowPlaying: false,
-                          getTopRated: false,
-                          getPopular: false,
-                          upcomingPage: page,
-                        );
-                      },
-                    ),
-                    movieRow(
-                      context,
-                      size,
-                      AppLocalizations.of(context)!.nowPlaying,
-                      nowPlaying.value,
-                      nowPlayingPage,
-                      (page) {
-                        return BlocProvider.of<HomeScreenCubit>(context)
-                            .getMovies(
-                          getPopular: false,
-                          getTopRated: false,
-                          getUpcoming: false,
-                          nowPlayingPage: page,
-                        );
-                      },
-                    ),
-                    movieRow(
-                      context,
-                      size,
-                      AppLocalizations.of(context)!.topRated,
-                      topRated.value,
-                      topRatedPage,
-                      (page) {
-                        return BlocProvider.of<HomeScreenCubit>(context)
-                            .getMovies(
-                          getNowPlaying: false,
-                          getPopular: false,
-                          getUpcoming: false,
-                          topRatedPage: page,
-                        );
-                      },
-                    ),
-                  ]
-                ],
-              ),
+                            if (searchOrDiscover!) {
+                              return BlocProvider.of<HomeScreenCubit>(context)
+                                  .searchMovies(
+                                      SearchMoviesParams(
+                                          query: searchController.text,
+                                          page: queryPage.value,
+                                          includeAdult: includeAdult.value,
+                                          language: language.value?.iso6391,
+                                          year: year.value),
+                                      true);
+                            } else {
+                              return BlocProvider.of<HomeScreenCubit>(context)
+                                  .discoverMovies(
+                                      DiscoverMoviesParams(
+                                        page: queryPage.value,
+                                        includeAdult: includeAdult.value,
+                                        language: language.value?.iso6391,
+                                        genres: genres.value
+                                            .map((e) => e.id)
+                                            .toList(),
+                                        primaryReleaseYear: year.value,
+                                        sortBy: sortBy.value.snakeName,
+                                        year: year.value,
+                                      ),
+                                      true);
+                            }
+                          },
+                          movies: queryResults)
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              movieRow(
+                                context,
+                                size,
+                                AppLocalizations.of(context)!.popular,
+                                popular.value,
+                                popularPage,
+                                (page) {
+                                  return BlocProvider.of<HomeScreenCubit>(
+                                          context)
+                                      .getMovies(
+                                    getNowPlaying: false,
+                                    getTopRated: false,
+                                    getUpcoming: false,
+                                    popularPage: page,
+                                  );
+                                },
+                              ),
+                              movieRow(
+                                context,
+                                size,
+                                AppLocalizations.of(context)!.upcoming,
+                                upcoming.value,
+                                upcomingPage,
+                                (page) {
+                                  return BlocProvider.of<HomeScreenCubit>(
+                                          context)
+                                      .getMovies(
+                                    getNowPlaying: false,
+                                    getTopRated: false,
+                                    getPopular: false,
+                                    upcomingPage: page,
+                                  );
+                                },
+                              ),
+                              movieRow(
+                                context,
+                                size,
+                                AppLocalizations.of(context)!.nowPlaying,
+                                nowPlaying.value,
+                                nowPlayingPage,
+                                (page) {
+                                  return BlocProvider.of<HomeScreenCubit>(
+                                          context)
+                                      .getMovies(
+                                    getPopular: false,
+                                    getTopRated: false,
+                                    getUpcoming: false,
+                                    nowPlayingPage: page,
+                                  );
+                                },
+                              ),
+                              movieRow(
+                                context,
+                                size,
+                                AppLocalizations.of(context)!.topRated,
+                                topRated.value,
+                                topRatedPage,
+                                (page) {
+                                  return BlocProvider.of<HomeScreenCubit>(
+                                          context)
+                                      .getMovies(
+                                    getNowPlaying: false,
+                                    getPopular: false,
+                                    getUpcoming: false,
+                                    topRatedPage: page,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+              ],
             ),
           );
         },
